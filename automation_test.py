@@ -8,9 +8,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 # Variable
 url = "http://barru.pythonanywhere.com/daftar"
-nama = "Mas Ojan"
-email = "ojanasik@gmail.com"
-password = "ojan123"
+nama = "Mas Nobi"
+email = "nobi@gmail.com"
+password = "nobi123"
+
+existing_email = "ojanasik@gmail.com"
+
 
 class TestRegister(unittest.TestCase):
     
@@ -26,9 +29,9 @@ class TestRegister(unittest.TestCase):
 
         driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
         time.sleep(1)
-        driver.find_element(By.ID,"name_register").send_keys(nama) # isi username
+        driver.find_element(By.ID,"name_register").send_keys(nama) # isi nama
         time.sleep(1)
-        driver.find_element(By.ID,"email_register").send_keys(email) # isi password
+        driver.find_element(By.ID,"email_register").send_keys(email) # isi email
         time.sleep(1)
         driver.find_element(By.ID,"password_register").send_keys(password) # isi password
         time.sleep(1)
@@ -43,7 +46,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(response_message, 'created user!')
 
     #Test Case Kedua
-    def test_a_success_register(self):
+    def test_b_failed_register_with_empty_password(self):
         #Steps
         driver = self.driver #buka web browser
         driver.get(url) # buka situs
@@ -51,9 +54,34 @@ class TestRegister(unittest.TestCase):
 
         driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
         time.sleep(1)
-        driver.find_element(By.ID,"name_register").send_keys(nama) # isi username
+        driver.find_element(By.ID,"name_register").send_keys(nama) # isi nama
         time.sleep(1)
-        driver.find_element(By.ID,"email_register").send_keys(email) # isi password
+        driver.find_element(By.ID,"email_register").send_keys(email) # isi email
+        time.sleep(1)
+        driver.find_element(By.ID,"password_register").send_keys() # kosongkan password
+        time.sleep(1)
+        driver.find_element(By.ID,"signup_register").click() # klik tombol sign up
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
+        self.assertEqual(response_message, 'Gagal Registrasi')
+
+   #Test Case Ketiga
+    def test_c_failed_register_with_empty_name(self):
+        #Steps
+        driver = self.driver #buka web browser
+        driver.get(url) # buka situs
+        time.sleep(3)
+
+        driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
+        time.sleep(1)
+        driver.find_element(By.ID,"name_register").send_keys() # kosongkan nama
+        time.sleep(1)
+        driver.find_element(By.ID,"email_register").send_keys(email) # isi email
         time.sleep(1)
         driver.find_element(By.ID,"password_register").send_keys(password) # isi password
         time.sleep(1)
@@ -64,10 +92,109 @@ class TestRegister(unittest.TestCase):
         response_data = driver.find_element(By.ID,"swal2-title").text
         response_message = driver.find_element(By.ID,"swal2-content").text
 
-        self.assertEqual(response_data,'berhasil')
-        self.assertEqual(response_message, 'created user!')
+        self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
+        self.assertEqual(response_message, 'Gagal Registrasi')
 
-        
+   #Test Case Keempat
+    def test_d_failed_register_with_empty_email(self):
+        #Steps
+        driver = self.driver #buka web browser
+        driver.get(url) # buka situs
+        time.sleep(3)
+
+        driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
+        time.sleep(1)
+        driver.find_element(By.ID,"name_register").send_keys(nama) # isi nama
+        time.sleep(1)
+        driver.find_element(By.ID,"email_register").send_keys() # kosongkan email
+        time.sleep(1)
+        driver.find_element(By.ID,"password_register").send_keys(password) # isi password
+        time.sleep(1)
+        driver.find_element(By.ID,"signup_register").click() # klik tombol sign up
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
+        self.assertEqual(response_message, 'Gagal Registrasi')
+
+   #Test Case Kelima
+    def test_e_failed_register_with_all_field_empty(self):
+        #Steps
+        driver = self.driver #buka web browser
+        driver.get(url) # buka situs
+        time.sleep(3)
+
+        driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
+        time.sleep(1)
+        driver.find_element(By.ID,"name_register").send_keys() # kosongkan nama
+        time.sleep(1)
+        driver.find_element(By.ID,"email_register").send_keys() # kosongkan email
+        time.sleep(1)
+        driver.find_element(By.ID,"password_register").send_keys() # kosongkan password
+        time.sleep(1)
+        driver.find_element(By.ID,"signup_register").click() # klik tombol sign up
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
+        self.assertEqual(response_message, 'Gagal Registrasi')
+
+   #Test Case Keenam
+    def test_f_failed_register_with_registered_email(self):
+        #Steps
+        driver = self.driver #buka web browser
+        driver.get(url) # buka situs
+        time.sleep(3)
+
+        driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
+        time.sleep(1)
+        driver.find_element(By.ID,"name_register").send_keys("Nobita") # isi nama baru
+        time.sleep(1)
+        driver.find_element(By.ID,"email_register").send_keys(existing_email) # isi  email terdaftar
+        time.sleep(1)
+        driver.find_element(By.ID,"password_register").send_keys("nobi123") # isi password
+        time.sleep(1)
+        driver.find_element(By.ID,"signup_register").click() # klik tombol sign up
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertIn('Email sudah terdaftar',response_data)
+        self.assertEqual(response_message, 'Gagal Registrasi')
+
+   #Test Case Ketujuh
+    def test_g_failed_register_with_invalid_email_format(self):
+        #Steps
+        driver = self.driver #buka web browser
+        driver.get(url) # buka situs
+        time.sleep(3)
+
+        driver.find_element(By.ID,"signUp").click() # Klik tombol Sign Up
+        time.sleep(1)
+        driver.find_element(By.ID,"name_register").send_keys("Nobita") # isi nama baru
+        time.sleep(1)
+        driver.find_element(By.XPATH,"/html[1]/body[1]/div[2]/div[1]/div[1]/h2[1]").send_keys("nobinobita") # isi email 
+        time.sleep(1)
+        driver.find_element(By.ID,"password_register").send_keys("nobi123") # isi password
+        time.sleep(1)
+        driver.find_element(By.ID,"signup_register").click() # klik tombol sign up
+        time.sleep(1)
+
+        # validasi
+        #response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"email").get_attribute("validationMessage")
+
+        self.assertIn("Please include an '@' in the email address",response_message)
+        #self.assertEqual(response_message, 'Gagal Registrasi')
+               
     def tearDown(self): 
         self.driver.close() 
 if __name__ == "__main__": 
