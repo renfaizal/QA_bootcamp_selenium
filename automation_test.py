@@ -20,7 +20,7 @@ class TestRegister(unittest.TestCase):
     def setUp(self): 
         self.driver = webdriver.Chrome(ChromeDriverManager().install()) 
     
-    #Test Case Pertama
+    #Test Case 1
     def test_a_success_register(self):
         #Steps
         driver = self.driver #buka web browser
@@ -45,7 +45,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(response_data,'berhasil')
         self.assertEqual(response_message, 'created user!')
 
-    #Test Case Kedua
+    #Test Case 2
     def test_b_failed_register_with_empty_password(self):
         #Steps
         driver = self.driver #buka web browser
@@ -70,7 +70,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
         self.assertEqual(response_message, 'Gagal Registrasi')
 
-   #Test Case Ketiga
+   #Test Case 3
     def test_c_failed_register_with_empty_name(self):
         #Steps
         driver = self.driver #buka web browser
@@ -95,7 +95,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
         self.assertEqual(response_message, 'Gagal Registrasi')
 
-   #Test Case Keempat
+   #Test Case 4
     def test_d_failed_register_with_empty_email(self):
         #Steps
         driver = self.driver #buka web browser
@@ -120,7 +120,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
         self.assertEqual(response_message, 'Gagal Registrasi')
 
-   #Test Case Kelima
+   #Test Case 5
     def test_e_failed_register_with_all_field_empty(self):
         #Steps
         driver = self.driver #buka web browser
@@ -145,7 +145,7 @@ class TestRegister(unittest.TestCase):
         self.assertEqual(response_data,'Email/Username/Password tidak boleh kosong')
         self.assertEqual(response_message, 'Gagal Registrasi')
 
-   #Test Case Keenam
+   #Test Case 6
     def test_f_failed_register_with_registered_email(self):
         #Steps
         driver = self.driver #buka web browser
@@ -170,7 +170,7 @@ class TestRegister(unittest.TestCase):
         self.assertIn('Email sudah terdaftar',response_data)
         self.assertEqual(response_message, 'Gagal Registrasi')
 
-   #Test Case Ketujuh
+   #Test Case 7
     def test_g_failed_register_with_invalid_email_format(self):
         #Steps
         driver = self.driver #buka web browser
@@ -189,33 +189,32 @@ class TestRegister(unittest.TestCase):
         time.sleep(1)
 
         # validasi
-        #response_data = driver.find_element(By.ID,"swal2-title").text
         response_message = driver.find_element(By.ID,"email").get_attribute("validationMessage")
 
         self.assertIn("Please include an '@' in the email address",response_message)
-        #self.assertEqual(response_message, 'Gagal Registrasi')
                
     def tearDown(self): 
         self.driver.close() 
 if __name__ == "__main__": 
     unittest.main()
 
-""" class TestLogin(unittest.TestCase): 
+class TestLogin(unittest.TestCase): 
 
     def setUp(self): 
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
         
-    def test_a_success_login(self): 
+    #Test Case 8   
+    def test_h_success_login(self): 
         # steps
         driver = self.driver #buka web browser
         driver.get(url) # buka situs
         time.sleep(3)
 
-        driver.find_element(By.ID,"user-name").send_keys(username) # isi username
+        driver.find_element(By.ID,"email").send_keys(email) # isi email
         time.sleep(1)
         driver.find_element(By.ID,"password").send_keys(password) # isi password
         time.sleep(1)
-        driver.find_element(By.ID,"login-button").click() # klik tombol sign in
+        driver.find_element(By.ID,"signin_login").click() # klik tombol sign in
         time.sleep(1)
 
         # validasi
@@ -224,14 +223,16 @@ if __name__ == "__main__":
 
         self.assertIn('Welcome', response_data)
         self.assertEqual(response_message, 'Anda Berhasil Login')
-     def test_a_failed_login_with_empty_password(self): 
+    
+    #Test Case 9
+    def test_i_failed_login_with_empty_password(self): 
         # steps
         driver = self.driver #buka web driver
-        driver.get("http://barru.pythonanywhere.com/daftar") # buka situs
+        driver.get(url) # buka situs
         time.sleep(3)
-        driver.find_element(By.XPATH,"/html/body/div/div[2]/form/input[1]").send_keys("tester@jagoqa.com") # isi email
+        driver.find_element(By.ID,"email").send_keys(email) # isi email
         time.sleep(1)
-        driver.find_element(By.CSS_SELECTOR,"input#password").send_keys("") # isi password
+        driver.find_element(By.ID,"password").send_keys() # kosongkan password
         time.sleep(1)
         driver.find_element(By.ID,"signin_login").click() # klik tombol sign in
         time.sleep(1)
@@ -243,14 +244,15 @@ if __name__ == "__main__":
         self.assertIn('not found', response_data)
         self.assertEqual(response_message, 'Email atau Password Anda Salah')
 
-    def test_a_failed_login_with_empty_email_and_password(self): 
+    #Test Case 10
+    def test_j_failed_login_with_empty_email(self): 
         # steps
         driver = self.driver #buka web driver
-        driver.get("http://barru.pythonanywhere.com/daftar") # buka situs
+        driver.get(url) # buka situs
         time.sleep(3)
-        driver.find_element(By.XPATH,"/html/body/div/div[2]/form/input[1]").send_keys("") # isi email
+        driver.find_element(By.ID,"email").send_keys() # kosongkan email
         time.sleep(1)
-        driver.find_element(By.CSS_SELECTOR,"input#password").send_keys("") # isi password
+        driver.find_element(By.ID,"password").send_keys(password) # isi password
         time.sleep(1)
         driver.find_element(By.ID,"signin_login").click() # klik tombol sign in
         time.sleep(1)
@@ -261,7 +263,68 @@ if __name__ == "__main__":
 
         self.assertIn('tidak valid', response_data)
         self.assertEqual(response_message, 'Cek kembali email anda')
- """
-   # def tearDown(self): 
-     #   self.driver.close() 
 
+    #Test Case 11
+    def test_k_failed_login_with_empty_email_and_password(self): 
+        # steps
+        driver = self.driver #buka web driver
+        driver.get(url) # buka situs
+        time.sleep(3)
+        driver.find_element(By.ID,"email").send_keys() # kosongkan email
+        time.sleep(1)
+        driver.find_element(By.ID,"password").send_keys() # kosongkan password
+        time.sleep(1)
+        driver.find_element(By.ID,"signin_login").click() # klik tombol sign in
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertIn('tidak valid', response_data)
+        self.assertEqual(response_message, 'Cek kembali email anda')
+    
+    #Test Case 12
+    def test_l_failed_login_with_unregistered_email(self): 
+        # steps
+        driver = self.driver #buka web driver
+        driver.get(url) # buka situs
+        time.sleep(3)
+        driver.find_element(By.ID,"email").send_keys('inibelumterdaftar@gmail.com') # isi email
+        time.sleep(1)
+        driver.find_element(By.ID,"password").send_keys('oke123') # isi password
+        time.sleep(1)
+        driver.find_element(By.ID,"signin_login").click() # klik tombol sign in
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertIn('not found', response_data)
+        self.assertEqual(response_message, 'Email atau Password Anda Salah')
+
+    #Test Case 13
+    def test_m_failed_login_with_wrong_password(self): 
+        # steps
+        driver = self.driver #buka web driver
+        driver.get(url) # buka situs
+        time.sleep(3)
+        driver.find_element(By.ID,"email").send_keys('inibelumterdaftar@gmail.com') # isi email
+        time.sleep(1)
+        driver.find_element(By.ID,"password").send_keys('oke123') # isi password
+        time.sleep(1)
+        driver.find_element(By.ID,"signin_login").click() # klik tombol sign in
+        time.sleep(1)
+
+        # validasi
+        response_data = driver.find_element(By.ID,"swal2-title").text
+        response_message = driver.find_element(By.ID,"swal2-content").text
+
+        self.assertIn('not found', response_data)
+        self.assertEqual(response_message, 'Email atau Password Anda Salah')
+
+    def tearDown(self): 
+        self.driver.close() 
+if __name__ == "__main__": 
+    unittest.main()
